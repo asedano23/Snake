@@ -3,9 +3,11 @@ import pprint
 
 def main():
     board = initialize_board()
-    snake = initialize_snake(board)
+    snake, snake_len = initialize_snake(board)
     depth = random.randint(1,20)
+    moves = check_moves(snake, board, snake_len,depth)
 
+    print('Number of possible paths:', moves)
 
 def initialize_board():
     rows = random.randint(1,10)
@@ -44,7 +46,75 @@ def initialize_snake(board):
         snake[len] = {"row": snake_row,
                  "column": snake_col}
     pprint.pprint(snake)
-    return snake
+    return snake,snake_len
 
+def check_moves(snake, board, snake_len,depth):
+    moves = 0 
+    more_moves = True
+    while(more_moves):
+        while(depth >= moves):
+            moves += 1
+
+            check_up(snake, snake_len)
+
+def check_up(snake, snake_len):
+    new_snake = {}
+    if snake[0]['row']>=0:
+        more_moves = True
+        for i in range(snake_len):
+            if i ==0:
+                new_snake[i] = {"row": snake[0]['row']-1,
+                    "column": snake[0]['column']}
+            else:
+                new_snake[i] = snake[i+1]
+    else:
+        more_moves = False
+    
+    return more_moves,new_snake
+
+def check_down(snake, board, snake_len):
+    new_snake = {}
+    if snake[0]['row']<= board[1]:
+        more_moves = True
+        for i in range(snake_len):
+            if i ==0:
+                new_snake[i] = {"row": snake[0]['row']+1,
+                    "column": snake[0]['column']}
+            else:
+                new_snake[i] = snake[i+1]
+    else:
+        more_moves = False
+    
+    return more_moves, new_snake
+
+def check_left(snake, snake_len):
+    new_snake = {}
+    if snake[0]['column']>=0:
+        more_moves = True
+        for i in range(snake_len):
+            if i ==0:
+                new_snake[i] = {"row": snake[0]['row'],
+                    "column": snake[0]['column']-1}
+            else:
+                new_snake[i] = snake[i+1]
+    else:
+        more_moves = False
+    
+    return more_moves,new_snake
+
+def check_rigth(snake, board, snake_len):
+    new_snake = {}
+    if snake[0]['column']<= board[0]:
+        more_moves = True
+        for i in range(snake_len):
+            if i ==0:
+                new_snake[i] = {"row": snake[0]['row'],
+                    "column": snake[0]['column']+1}
+            else:
+                new_snake[i] = snake[i+1]
+    else:
+        more_moves = False
+    
+    return more_moves, new_snake
 
 main()
